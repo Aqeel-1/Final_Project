@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- Bootstrap javascript import -->
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Bootstrap css import -->
+    <link
+      rel="stylesheet"
+      href="./node_modules/bootstrap/dist/css/bootstrap.min.css"
+    />
+
+    <style>
+      body {
+        background-color: #f0ecff;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Nav bar -->
+    <div class="container">
+      <div class="d-flex justify-content-center">
+        <div class="col-9">
+          <nav class="navbar navbar-expand-lg bg-body-tertiary shadow rounded">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Aqeel</a>
+              <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#"
+                      >Home</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Profile</a>
+                  </li>
+                </ul>
+                <div class="d-flex w-100 justify-content-end">
+                  <button type="button" class="btn btn-outline-success mx-2">
+                    Login
+                  </button>
+                  <button type="button" class="btn btn-outline-success mx-2">
+                    Register
+                  </button>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <!--// Nav bar //-->
+    <!-- Main content -->
+    <div class="container">
+      <!-- Posts -->
+      <div id="posts" class="mt-5">
+        <!-- Post -->
+        <div class="d-flex justify-content-center">
+          <div class="col-9">
+            <div class="card">
+              <div class="card-header">
+                <img
+                  class="rounded-circle border border-info"
+                  src="./profile_pics/1.jpg"
+                  alt=""
+                  style="width: 40px; height: 40px"
+                />
+                <b>@Aqeel</b>
+              </div>
+              <div class="card-body">
+                <img class="w-100" src="./placeholder/1.jpg" alt="" />
+                <h6 class="mt-1" style="color: rgb(174, 174, 174)">
+                  2 min ago
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--// Post //-->
+      </div>
+      <!--// Posts //-->
+    </div>
+    <!--// Main content //-->
+  </body>
+</html>
