@@ -1,4 +1,5 @@
 node_modules/
+*.code-workspace
 .Ds_Store
 *.log
 Thimbs.db
