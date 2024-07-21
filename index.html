@@ -123,6 +123,17 @@
           <div class="modal-body">
             <form>
               <div class="mb-3">
+                <label for="recipient-name" class="col-form-label"
+                  >Profile image</label
+                >
+                <input
+                  type="file"
+                  class="form-control"
+                  id="register-image-feld"
+                />
+              </div>
+
+              <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">Name</label>
                 <input
                   type="text"
@@ -259,10 +270,12 @@
 
     <!-- Nav bar -->
     <div class="container">
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-center align-items-center">
         <div class="col-9">
           <nav class="navbar navbar-expand-lg bg-body-tertiary shadow rounded">
-            <div class="container-fluid">
+            <div
+              class="container-fluid d-flex justify-content-center align-items-center"
+            >
               <a class="navbar-brand" href="#">Aqeel</a>
               <button
                 class="navbar-toggler"
@@ -308,6 +321,14 @@
                   </button>
 
                   <!-- When login -->
+                  <img
+                    class="rounded-circle"
+                    style="height: 40px; width: 40px; margin-right: 10px"
+                    src="./profile_pics/1.jpg"
+                    alt=""
+                    id="nav-user-image"
+                  />
+                  <p id="nav-username">Username</p>
                   <button
                     id="main-logout"
                     type="button"
@@ -522,18 +543,42 @@
   </body>
 
   <script>
+    /*==== Infinit scrolling=== */
+
+    let currentPage = 2;
+    let lastPage = 1;
+
+    window.addEventListener("scroll", function () {
+      const endOfPage =
+        window.innerHeight + window.pageYOffset >=
+        document.body.offsetHeight - 1;
+
+      if (endOfPage && currentPage < lastPage) {
+        getPosts(false, currentPage++);
+
+        console.log(currentPage);
+      }
+    });
+
+    /*====// Infinit scrolling//=== */
+
     const baseUrl = "https://tarmeezacademy.com/api/v1";
 
     setupUi();
+    getPosts();
+    function getPosts(reload = true, page = 1) {
+      axios.get(`${baseUrl}/posts?limit=5&page=${page}`).then((respons) => {
+        const postsSection = document.getElementById("posts");
+        const posts = respons.data.data;
+        // console.log(posts);
+        lastPage = respons.data.meta.last_page;
+        if (reload) {
+          postsSection.innerHTML = "";
+        }
 
-    axios.get(`${baseUrl}/posts`).then((respons) => {
-      const postsSection = document.getElementById("posts");
-      const posts = respons.data.data;
-      console.log(posts);
-      postsSection.innerHTML = "";
-      for (post of posts) {
-        const author = post.author;
-        const content = `<div class="d-flex justify-content-center">
+        for (post of posts) {
+          const author = post.author;
+          const content = `<div class="d-flex justify-content-center">
           <div class="col-9">
             <div class="card shadow">
               <div class="card-header">
@@ -579,34 +624,41 @@
           </div>
         </div>`;
 
-        postsSection.innerHTML += content;
+          postsSection.innerHTML += content;
 
-        const currentPost = `post-tags-${post.id}`;
-        const tagsContent = document.getElementById(currentPost);
-        for (tag of post.tags) {
-          const tagContent = `<button type="button" class="btn btn-secondary">${tag.name}</button>`;
-          tagsContent.innerHTML += tagContent;
+          const currentPost = `post-tags-${post.id}`;
+          const tagsContent = document.getElementById(currentPost);
+          for (tag of post.tags) {
+            const tagContent = `<button type="button" class="btn btn-secondary">${tag.name}</button>`;
+            tagsContent.innerHTML += tagContent;
+          }
         }
-      }
-    });
+      });
+    }
 
     // Register function
     document.getElementById("register-btn").addEventListener("click", () => {
       const name = document.getElementById("register-name-feld").value;
       const userName = document.getElementById("register-username-feld").value;
       const password = document.getElementById("register-password-feld").value;
-      console.log(name, userName, password);
+      const image = document.getElementById("register-image-feld").files[0];
 
-      const bodyParams = {
-        username: userName,
-        password: password,
-        name: name,
-      };
+      const params = new FormData();
+      params.append("name", name);
+      params.append("username", userName);
+      params.append("password", password);
+      params.append("image", image);
+
+      // const bodyParams = {
+      //   username: userName,
+      //   password: password,
+      //   name: name,
+      // };
 
       const url = `${baseUrl}/register`;
 
       axios
-        .post(url, bodyParams)
+        .post(url, params)
         .then((response) => {
           console.log(response.data);
           localStorage.setItem("token", response.data.token);
@@ -687,6 +739,8 @@
       const loginBtn = document.getElementById("main-login-btn");
       const register = document.getElementById("main-register-btn");
       const logout = document.getElementById("main-logout");
+      const profileUserName = document.getElementById("nav-username");
+      const profileUserImage = document.getElementById("nav-user-image");
 
       // add button
       const addBtn = document.getElementById("add-btn");
@@ -696,11 +750,19 @@
         loginBtn.style.display = "block";
         register.style.display = "block";
         logout.style.display = "none";
+        profileUserName.style.display = "none";
+        profileUserImage.style.display = "none";
       } else {
         addBtn.style.display = "flex";
         loginBtn.style.display = "none";
         register.style.display = "none";
         logout.style.display = "block";
+        profileUserImage.style.display = "block";
+        profileUserName.style.display = "block";
+
+        const user = getCurrentUser();
+        profileUserName.innerHTML = user.username;
+        profileUserImage.setAttribute("src", user.profile_image);
       }
     }
 
@@ -745,5 +807,16 @@
           showAlert(error.response.data.message, "danger");
         });
     });
+
+    function getCurrentUser() {
+      let user = null;
+      let storageUser = JSON.parse(localStorage.getItem("user"));
+
+      if (storageUser != null) {
+        user = storageUser;
+      }
+
+      return user;
+    }
   </script>
 </html>
