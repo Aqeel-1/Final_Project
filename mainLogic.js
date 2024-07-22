@@ -96,17 +96,23 @@ document.getElementById("login-btn").addEventListener("click", () => {
 
   const url = `${baseUrl}/login`;
 
-  axios.post(url, bodyParams).then((response) => {
-    console.log(response.data);
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("user", JSON.stringify(response.data.user));
+  axios
+    .post(url, bodyParams)
+    .then((response) => {
+      console.log(response.data);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
 
-    const modal = document.getElementById("login-modal");
-    const instanceModal = bootstrap.Modal.getInstance(modal);
-    instanceModal.hide();
-    showAlert("Logged in successfully!", "success");
-    setupUi();
-  });
+      const modal = document.getElementById("login-modal");
+      const instanceModal = bootstrap.Modal.getInstance(modal);
+      instanceModal.hide();
+      showAlert("Logged in successfully!", "success");
+      setupUi();
+    })
+    .catch((error) => {
+      showAlert(error.response.data.message, "danger");
+      console.log(error);
+    });
 });
 
 // logout function

@@ -37,6 +37,9 @@
         cursor: pointer;
         box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.3);
       }
+      .cur-ptr {
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -577,19 +580,24 @@
 
         for (post of posts) {
           const author = post.author;
-          const content = `<div class="d-flex justify-content-center">
+          const profileImage =
+            Object.keys(author.profile_image).length === 0
+              ? "./profile_pics/1.jpg"
+              : author.profile_image;
+
+          const content = `<div class="d-flex justify-content-center cur-ptr">
           <div class="col-9">
             <div class="card shadow">
               <div class="card-header">
                 <img
                   class="rounded-circle border border-info"
-                  src="${author.profile_image}"
+                  src="${profileImage}"
                   alt=""
                   style="width: 40px; height: 40px"
                 />
-                <b>${author.username}</b>
+                <b id="post-id-${post.id}">${author.username}</b>
               </div>
-              <div class="card-body">
+              <div class="card-body" onclick="postClicked(${post.id})">
                 <img class="w-100" src="${post.image}" alt="" />
                 <h6 class="mt-1" style="color: rgb(174, 174, 174)">
                   ${post.created_at}
@@ -676,5 +684,9 @@
           showAlert(error.response.data.message, "danger");
         });
     });
+
+    function postClicked(postId) {
+      window.location = `./post_details.html?postId=${postId}`;
+    }
   </script>
 </html>
